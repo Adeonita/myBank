@@ -17,5 +17,5 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('/user/create', 'UserController@create');
+$router->post('/user', 'UserController@create');
 $router->get('/user/{document}', 'UserController@find');
