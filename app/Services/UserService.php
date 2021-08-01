@@ -3,6 +3,7 @@
 
     use Exception;
     use App\Models\User;
+    use App\Services\WalletService;
     use App\Http\Interfaces\UserServiceInterface;
     use App\Exceptions\UserNotFound;
 
@@ -10,7 +11,8 @@
         
         public static function create($user): void {
             try {              
-                User::create($user);
+               $user =  User::create($user);
+               WalletService::create($user->id);
             } catch(Exception $e) {
                 response()->json([
                     'message' => $e
