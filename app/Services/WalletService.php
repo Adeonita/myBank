@@ -3,7 +3,6 @@
 
     use App\Models\Wallet;
     use App\Http\Interfaces\WalletServiceInterface;
-    use Exception;
 
 class WalletService implements WalletServiceInterface {
         
