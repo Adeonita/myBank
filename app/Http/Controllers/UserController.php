@@ -1,8 +1,7 @@
 <?php
     namespace App\Http\Controllers;
     use Illuminate\Http\Request;
-    use App\Http\Services\UserService;
-    use App\Models\User;
+    use App\Services\UserService;
     use Exception;
 
     class UserController extends Controller {

@@ -1,14 +1,15 @@
 <?php
-    namespace App\Http\Services;
+    namespace App\Services;
+
+    use Exception;
     use App\Models\User;
     use App\Http\Interfaces\UserServiceInterface;
-    use Exception;
     use App\Exceptions\UserNotFound;
 
     class UserService implements UserServiceInterface  {
         
         public static function create($user): void {
-            try {
+            try {              
                 User::create($user);
             } catch(Exception $e) {
                 response()->json([
