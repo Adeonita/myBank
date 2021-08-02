@@ -13,7 +13,7 @@
                 'email' => 'required|email|unique:users',
                 'password' => 'required',
                 'phoneNumber' => 'required|unique:users',
-                'type' => 'in:COMMON,SHOPKEEPER'
+                'type' => 'required|in:COMMON,SHOPKEEPER'
             ]);
         }
 
@@ -35,7 +35,7 @@
 
         public function find(string $document) {
             try {
-                return UserService::get($document);                
+                return UserService::getByDocument($document);                
             } catch (Exception $e) {
                return $this->getCustomError($e);  
             }
