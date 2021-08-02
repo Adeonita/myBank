@@ -19,3 +19,5 @@ $router->get('/', function () use ($router) {
 
 $router->post('/user', 'UserController@create');
 $router->get('/user/{document}', 'UserController@find');
+
+$router->post('/transaction', 'TransactionController@create');
