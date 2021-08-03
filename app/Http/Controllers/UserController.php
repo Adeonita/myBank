@@ -1,45 +1,49 @@
 <?php
-    namespace App\Http\Controllers;
-    
-    use Exception;
-    use Illuminate\Http\Request;
-    use App\Services\UserService;
+namespace App\Http\Controllers;
 
-    class UserController extends Controller {
+use Exception;
+use Illuminate\Http\Request;
+use App\Services\UserService;
 
-        protected $user;
+class UserController extends Controller
+{
 
-        public function __construct(UserService $user){
-            $this->user = $user;
-        }
+    protected $user;
 
-        private function validateRequest(Request $request) {
-            return $this->validate($request, [
-                'firstName' => 'required',
-                'lastName' => 'required',
-                'document' => 'required|unique:users|min:11|max:14',
-                'email' => 'required|email|unique:users',
-                'password' => 'required',
-                'phoneNumber' => 'required|unique:users',
-                'type' => 'required|in:COMMON,SHOPKEEPER'
-            ]);
-        }
-
-        public function create(Request $request) {
-            $this->validateRequest($request);
-            $this->user->create($request->all());
-        }
-    
-        public function find(string $document) {
-            try {
-                return $this->user->getByDocument($document);                
-            } catch (Exception $e) {
-                return response()
-                ->json([
-                    "error" => $e->getMessage()
-                ], $e->getCode());
-            }
-        }
-        
+    public function __construct(UserService $user)
+    {
+        $this->user = $user;
     }
-?>
+
+    private function validateRequest(Request $request)
+    {
+        return $this->validate($request, [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'document' => 'required|unique:users|min:11|max:14',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+            'phoneNumber' => 'required|unique:users',
+            'type' => 'required|in:COMMON,SHOPKEEPER'
+        ]);
+    }
+
+    public function create(Request $request)
+    {
+        $this->validateRequest($request);
+        $this->user->create($request->all());
+    }
+
+    public function find(string $document)
+    {
+        try {
+            return $this->user->getByDocument($document);                
+        } catch (Exception $e) {
+            return response()
+            ->json([
+                "error" => $e->getMessage()
+            ], $e->getCode());
+        }
+    }
+    
+}

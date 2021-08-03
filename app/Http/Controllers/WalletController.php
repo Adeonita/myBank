@@ -1,11 +1,11 @@
 <?php 
     namespace App\Http\Controllers;
 
+    use Exception;
     use App\Services\UserService;
-use App\Services\WalletService;
-use Exception;
+    use App\Services\WalletService;
 
-class WalletController {
+    class WalletController extends Controller {
         protected $user;
         protected $wallet;
 
@@ -15,10 +15,10 @@ class WalletController {
         }
 
         public function getByUser(string $userId) {
-            try{
+            try {
                 $this->user->getById($userId);
                 return $this->wallet->getByUser($userId);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 return response()
                 ->json([
                     "error" => $e->getMessage()
