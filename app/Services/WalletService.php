@@ -11,10 +11,27 @@
             return $wallet->money;
         }
 
-        public static function create($userId): void {
+        public function create($userId): void {
             Wallet::create([
                 'user_id' => $userId,
                 'money' => 0
             ]);
+        }
+
+        private function updateBalance($userId, $value) {
+            return Wallet::where('user_id', $userId)
+                ->update(['money' => $value]);
+        }
+
+        public function addMoney($userId, $value) {
+            $balance = ($this->getBalance(($userId))) + $value;
+
+            $this->updateBalance($userId, $balance);
+        }
+
+        public function debitMoney($userId, $value) {
+            $balance = ($this->getBalance($userId)) - $value;
+
+            $this->updateBalance($userId, $balance);
         }
     }
