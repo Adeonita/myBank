@@ -6,17 +6,26 @@
     use Illuminate\Support\Facades\DB;
 
 class TransactionService {
+    protected $wallet;
+
+    public function __construct(WalletService $wallet) {
+        $this->wallet = $wallet;
+    }
 
     public function create($transaction) {
         try {
             DB::beginTransaction();
+                $this->wallet->debitMoney($transaction['payer'], $transaction['value']);
+                $this->wallet->addMoney($transaction['payee'], $transaction['value']);
+                
                 Transaction::create($transaction);
+                
             DB::commit();
+
         } catch(Exception $e) {
+            dd($e);
             DB::rollBack();
-            echo response()->json([
-                'message' => $e->getMessage()
-            ], 400);
+            throw new Exception($e->getMessage(), 400);
         }
     }
 }

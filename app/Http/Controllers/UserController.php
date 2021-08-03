@@ -1,10 +1,18 @@
 <?php
     namespace App\Http\Controllers;
+    
+    use Exception;
     use Illuminate\Http\Request;
     use App\Services\UserService;
-    use Exception;
 
     class UserController extends Controller {
+
+        protected $user;
+
+        public function __construct(UserService $user){
+            $this->user = $user;
+        }
+
         private function validateRequest(Request $request) {
             return $this->validate($request, [
                 'firstName' => 'required',
@@ -19,26 +27,19 @@
 
         public function create(Request $request) {
             $this->validateRequest($request);
-           
-            UserService::create($request->all());
+            $this->user->create($request->all());
         }
-
-        //TODO: mover para classe de erro
-        private function getCustomError(Exception $e) {
-            $errorType = get_class($e);
-            if($errorType === "App\Exceptions\UserNotFound"){
-                return response()->json([
-                    'message' => $e->getMessage()
-                ], 404);
-            }
-        }
-
+    
         public function find(string $document) {
             try {
-                return UserService::getByDocument($document);                
+                return $this->user->getByDocument($document);                
             } catch (Exception $e) {
-               return $this->getCustomError($e);  
+                return response()
+                ->json([
+                    "error" => $e->getMessage()
+                ], $e->getCode());
             }
         }
         
     }
+?>
