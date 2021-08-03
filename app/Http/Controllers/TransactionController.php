@@ -82,4 +82,17 @@ class TransactionController extends Controller {
                 
             }
         }
+
+        public function getByUser(string $userId) {
+            try {
+                $this->user->getById($userId);
+                return $this->transaction->getByUser($userId);
+            }catch (\Exception $e) {
+                dd($e);
+                return response()
+                    ->json([
+                        "error" => $e->getMessage()
+                    ], $e->getCode());
+            }
+        }
     }

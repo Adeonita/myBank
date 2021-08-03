@@ -28,4 +28,8 @@ class TransactionService {
             throw new Exception($e->getMessage(), 400);
         }
     }
+
+    public function getByUser(string $userId) {
+        return Transaction::where('transactions.payer', $userId)->get();
+    }
 }
