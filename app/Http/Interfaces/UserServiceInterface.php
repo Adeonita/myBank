@@ -4,8 +4,7 @@
     use App\Models\User;
 
     interface UserServiceInterface {
-        public static function create(User $user): void;
-        public static function getByDocument(string $document): User;
-        public static function getById(string $document): User;
-
+        public function create(User $user): void;
+        public function getByDocument(string $document): User;
+        public function getById(string $document): User;
     }

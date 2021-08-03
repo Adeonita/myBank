@@ -7,36 +7,48 @@
     use Illuminate\Support\Facades\DB;
     use App\Http\Interfaces\UserServiceInterface;
 
-class UserService implements UserServiceInterface  {
-        
-        public static function create($user): void {
+    class UserService implements UserServiceInterface {
+
+        protected $wallet;
+
+        public function __construct( WalletService $wallet) {
+            $this->wallet = $wallet;
+        }
+
+        public function create($user): void {
             try {              
                 DB::beginTransaction();
                     $user =  User::create($user);
-                    WalletService::create($user->id);
-                DB::commit();
 
+                    $this->wallet->create($user->id);
+                DB::commit();
             } catch(\Exception $e) {
                 DB::rollBack();
-
                 echo response()->json([
                     'message' => $e->getMessage()
                 ], 400);
             }
         }
 
-        public static function getByDocument(string $document): User {
+        public function getByDocument(string $document): User {
             $user = User::firstWhere('document',$document);
             
             if (!$user){
-                throw new UserNotFound("User not Found");
+                throw new UserNotFound("User not Found", 404);
             }
             
             return $user;
         }
 
 
-        public static function getById(string $id): User {
-            return User::find($id);
+        public function getById(string $id): User {
+            $user = User::find($id);
+
+            if (!$user){
+                throw new UserNotFound("User not Found", 404);
+            }
+            
+            return $user;
         }
     }
+?>
