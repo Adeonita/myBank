@@ -1,44 +1,49 @@
 <?php
-    namespace App\Http\Controllers;
-    use Illuminate\Http\Request;
-    use App\Services\UserService;
-    use Exception;
+namespace App\Http\Controllers;
 
-    class UserController extends Controller {
-        private function validateRequest(Request $request) {
-            return $this->validate($request, [
-                'firstName' => 'required',
-                'lastName' => 'required',
-                'document' => 'required|unique:users|min:11|max:14',
-                'email' => 'required|email|unique:users',
-                'password' => 'required',
-                'phoneNumber' => 'required|unique:users',
-                'type' => 'in:COMMON,SHOPKEEPER'
-            ]);
-        }
+use Exception;
+use Illuminate\Http\Request;
+use App\Services\UserService;
 
-        public function create(Request $request) {
-            $this->validateRequest($request);
-           
-            UserService::create($request->all());
-        }
+class UserController extends Controller
+{
 
-        //TODO: mover para classe de erro
-        private function getCustomError(Exception $e) {
-            $errorType = get_class($e);
-            if($errorType === "App\Exceptions\UserNotFound"){
-                return response()->json([
-                    'message' => $e->getMessage()
-                ], 404);
-            }
-        }
+    protected $user;
 
-        public function find(string $document) {
-            try {
-                return UserService::get($document);                
-            } catch (Exception $e) {
-               return $this->getCustomError($e);  
-            }
-        }
-        
+    public function __construct(UserService $user)
+    {
+        $this->user = $user;
     }
+
+    private function validateRequest(Request $request)
+    {
+        return $this->validate($request, [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'document' => 'required|unique:users|min:11|max:14',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+            'phoneNumber' => 'required|unique:users',
+            'type' => 'required|in:COMMON,SHOPKEEPER'
+        ]);
+    }
+
+    public function create(Request $request)
+    {
+        $this->validateRequest($request);
+        $this->user->create($request->all());
+    }
+
+    public function find(string $document)
+    {
+        try {
+            return $this->user->getByDocument($document);                
+        } catch (Exception $e) {
+            return response()
+            ->json([
+                "error" => $e->getMessage()
+            ], $e->getCode());
+        }
+    }
+    
+}

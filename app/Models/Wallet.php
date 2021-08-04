@@ -1,12 +1,13 @@
 <?php
-    namespace App\Models;
+namespace App\Models;
 
-    use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 
-    class Wallet extends Model {
-        public $timestamps = false;
+class Wallet extends Model 
+{
+    public $timestamps = false;
 
-        protected $fillable = [
-            'money', "user_id",
-        ];
-    }
+    protected $fillable = [
+        'money', "user_id",
+    ];
+}

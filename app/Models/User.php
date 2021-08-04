@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-class User extends Model
+
+class User extends Model 
 {
 
     public $timestamps = false;
@@ -16,7 +16,8 @@ class User extends Model
         'password',
     ];
 
-    public function wallet(){
+    public function wallet()
+    {
         return $this->hasOne(Wallet::class);
     }
 }
