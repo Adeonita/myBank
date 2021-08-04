@@ -3,9 +3,10 @@ namespace App\Services;
 
 use Exception;
 use App\Models\Transaction;
+use App\Http\Interfaces\TransactionServiceInterface;
 use Illuminate\Support\Facades\DB;
 
-class TransactionService 
+class TransactionService implements TransactionServiceInterface
 {
     protected $wallet;
 
@@ -14,7 +15,8 @@ class TransactionService
         $this->wallet = $wallet;
     }
 
-    public function create(Transaction $transaction)
+    //TODO: Adicionar tipo a transaction
+    public function create($transaction): void
     {
         try {
             DB::beginTransaction();
@@ -32,7 +34,7 @@ class TransactionService
         }
     }
 
-    public function getByUser(string $userId)
+    public function getByUser(string $userId): Transaction
     {
         return Transaction::where('transactions.payer', $userId)->get();
     }

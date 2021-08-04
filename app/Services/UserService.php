@@ -18,7 +18,8 @@ class UserService implements UserServiceInterface
         $this->wallet = $wallet;
     }
 
-    public function create(User $user): void
+    //TODO: adicionar tipo
+    public function create($user): void
     {
         try {              
             DB::beginTransaction();
