@@ -96,7 +96,6 @@ class TransactionController extends Controller
             $this->user->getById($userId);
             return $this->transaction->getByUser($userId);
         } catch (Exception $e) {
-            dd($e);
             return response()
                 ->json([
                     "error" => $e->getMessage()
