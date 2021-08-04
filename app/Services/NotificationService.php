@@ -22,9 +22,9 @@ class NotificationService implements NotificationInterface
     {
         $response = $this->client::get('http://o4d9z.mocklab.io/notify');
         
-        if ($response->status() !== 200) {
-            //TODO: add to queue
-        }
+        // if ($response->status() !== 200) {
+        //     //TODO: add to queue
+        // }
         
         return $this->getMessage($value, $payerName);
     }
