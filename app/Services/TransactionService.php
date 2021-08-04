@@ -9,14 +9,18 @@ use Illuminate\Support\Facades\DB;
 class TransactionService implements TransactionServiceInterface
 {
     protected $wallet;
+    protected $user;
+    protected $notification;
 
-    public function __construct(WalletService $wallet)
+    public function __construct(WalletService $wallet, UserService $user, NotificationService $notification)
     {
+        $this->user = $user;
         $this->wallet = $wallet;
+        $this->notification = $notification;
     }
 
     //TODO: Adicionar tipo a transaction
-    public function create($transaction): void
+    public function create($transaction ): void
     {
         try {
             DB::beginTransaction();
@@ -24,11 +28,17 @@ class TransactionService implements TransactionServiceInterface
                 $this->wallet->addMoney($transaction['payee'], $transaction['value']);
             
                 Transaction::create($transaction);
+
+                $payerName = $this->user->getById($transaction['payer'])->firstName;
+                $user = $this->user->getById($transaction['payee']);
+                $email = $user->email;
+                $phoneNumber = $user->phoneNumber;
+
+                $this->notification->send($email, $phoneNumber, $transaction['value'], $payerName);
             
             DB::commit();
 
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
             throw new Exception($e->getMessage(), 400);
         }
