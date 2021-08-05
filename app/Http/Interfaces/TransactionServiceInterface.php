@@ -5,6 +5,6 @@ use App\Models\Transaction;
 
 interface TransactionServiceInterface 
 {
-    public function create(Transaction $transaction): void;
+    public function create($transaction): void;
     public function getByUser(string $userId): Transaction;
 }
