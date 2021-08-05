@@ -69,9 +69,6 @@ class TransactionController extends Controller
         }
     }
 
-        //TODO: Cada transação gera dois registros
-        //Um crédito na conta do payee
-        //Um débito na conta do payer
     public function create(Request $request)
     {
         try {
@@ -86,7 +83,6 @@ class TransactionController extends Controller
                 ->json([
                     "error" => $e->getMessage()
                 ], $e->getCode());
-            
         }
     }
 
