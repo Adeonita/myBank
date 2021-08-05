@@ -21,7 +21,7 @@ Api RESTFULL em lumen que simula uma transação bancária entre dois usuários.
     - Execute o comando `composer install` para realizar a instalação das dependências
     - Execute o comando `php artisan migrate`, para instalar as migrações
     - Execute o comando `php artisan db:seed`, para povoar o banco de dados 
- - Execute o comando `php queue:work` para monitorar os envios de notificações que serão enviados para a fila
+ - Execute o comando `php artisan queue:work` para monitorar os envios de notificações que serão enviados para a fila
 
 ## Rotas
 
