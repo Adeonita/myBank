@@ -38,4 +38,4 @@ Api RESTFULL em lumen que simula uma transação bancária entre dois usuários.
     - Retorna userId com a sua carteira
 
 ## Diagrama de dados
-![Alt text](./diagramDatabase.png "Optional Title")
+![Alt text](./diagramDatabase.png "Diagrama de dados")
