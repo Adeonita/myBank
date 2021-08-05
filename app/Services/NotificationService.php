@@ -2,30 +2,13 @@
 namespace App\Services;
 
 use App\Http\Interfaces\NotificationInterface;
-use Illuminate\Support\Facades\Http;
+use App\Jobs\NotificationJob;
+use Exception;
 
 class NotificationService implements NotificationInterface
 {
-    private $client;
-
-    public function __construct(Http $client)
+    public function send($email, $phoneNumber, $value, $payerName)
     {
-        $this->client = $client;
-    }
-
-    private function getMessage($value, $payerName) 
-    {
-        return "Você recebeu um deposito no valor de R$ $value de $payerName ";
-    }
-
-    public function send($email, $phoneNumber, $value, $payerName): string
-    {
-        $response = $this->client::get('http://o4d9z.mocklab.io/notify');
-        
-        // if ($response->status() !== 200) {
-        //     //TODO: add to queue
-        // }
-        
-        return $this->getMessage($value, $payerName);
+        dispatch(new NotificationJob($email, $phoneNumber, $value, $payerName));
     }
 }
