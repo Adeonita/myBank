@@ -23,9 +23,9 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
-
-// $app->withEloquent();
+$app->withFacades();
+$app->configure('queue');
+$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------

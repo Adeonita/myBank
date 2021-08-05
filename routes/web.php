@@ -16,3 +16,11 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->post('/user', 'UserController@create');
+$router->get('/users', 'UserController@getAll');
+$router->get('/user/{id}', 'UserController@find');
+$router->get('/user/{userId}/wallet', 'WalletController@getByUser');
+
+$router->post('/transaction', 'TransactionController@create');
+$router->get('/transaction/user/{userId}', 'TransactionController@getByUser');
