@@ -1,24 +1,41 @@
-# Lumen PHP Framework
+# My Bank
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
+Api RESTFULL em lumen que simula uma transação bancária entre dois usuários.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+- Regras
+    - Um usuário do tipo COMMON poderá realizar transações para outro usuário do tipo COMMON ou para um SHOPKEEPER
+    - Um SHOPKEEPER não pode realizar transações, apenas receber
 
-## Official Documentation
+## Requisitos 
+- php 7.*
+- mysql 
+- insomnia ou postman
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
 
-## Contributing
+## Como rodar
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+ - Realize clone do projeto na sua máquina
+ - Crie o banco de dados com o nome my_bank 
+ - Na raiz do projeto: 
+    - Insira o arquivo .env enviado
+    - Execute o comando `composer install` para realizar a instalação das dependencias
+    - Execute o comando php artisan migrate, para instalar as migrações
+    - Execute o comando php artisan db:seed, para povoar o banco de dados 
+ - Execute o comando php queue:work para monitorar os envios de notificações que serão enviados para a fila
 
-## Security Vulnerabilities
+## Rotas
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+- POST - /transaction 
+   - `  { 
+            payer: int
+            payee: int
+            value: float
+        }    
+    `
+    - Cria uma transação 
 
-## License
+- GET - /user/{userId}/wallet
+    - Retorna userId com a sua carteira
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Diagrama de dados
+![Alt text](./diagramDatabase.png "Optional Title")
