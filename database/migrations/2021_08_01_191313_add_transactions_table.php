@@ -19,6 +19,10 @@ class AddTransactionsTable extends Migration
                 
             $table->unsignedBigInteger("payee");
             $table->foreign("payee")->unique()->references("id")->on("users")->onDelete('cascade');
+
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+
         });
     }
 

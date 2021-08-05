@@ -22,8 +22,7 @@ class TransactionService implements TransactionServiceInterface
         $this->authorization = $authorization;
     }
 
-    //TODO: Adicionar tipo a transaction
-    public function create($transaction ): void
+    public function create($transaction): void
     {
         try {
             DB::beginTransaction();
@@ -53,7 +52,7 @@ class TransactionService implements TransactionServiceInterface
         }
     }
 
-    public function getByUser(string $userId): Transaction
+    public function getByUser(string $userId)
     {
         return Transaction::where('transactions.payer', $userId)->get();
     }
