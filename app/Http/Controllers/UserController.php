@@ -34,10 +34,10 @@ class UserController extends Controller
         $this->user->create($request->all());
     }
 
-    public function find(string $document)
+    public function find(string $id)
     {
         try {
-            return $this->user->getByDocument($document);                
+            return $this->user->getById($id);                
         } catch (Exception $e) {
             return response()
             ->json([
@@ -45,5 +45,19 @@ class UserController extends Controller
             ], $e->getCode());
         }
     }
+
+    public function getAll()
+    {
+        try {
+            return $this->user->getAll();                
+        } catch (Exception $e) {
+            return response()
+            ->json([
+                "error" => $e->getMessage()
+            ], $e->getCode());
+        }
+    }
+
+
     
 }

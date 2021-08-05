@@ -18,7 +18,6 @@ class UserService implements UserServiceInterface
         $this->wallet = $wallet;
     }
 
-    //TODO: adicionar tipo
     public function create($user): void
     {
         try {              
@@ -35,17 +34,9 @@ class UserService implements UserServiceInterface
         }
     }
 
-    public function getByDocument(string $document): User
-    {
-        $user = User::firstWhere('document',$document);
-        
-        if (!$user) {
-            throw new UserNotFound("User not Found", 404);
-        }
-        
-        return $user;
+    public function getAll() {
+        return User::all();
     }
-
 
     public function getById(string $id): User
     {
