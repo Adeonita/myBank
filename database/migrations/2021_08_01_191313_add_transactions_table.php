@@ -12,13 +12,16 @@ class AddTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->float('value');
-            $table->enum('type', ['DEBIT','CREDIT']);
 
             $table->unsignedBigInteger("payer");
             $table->foreign("payer")->unique()->references("id")->on("users")->onDelete('cascade');
                 
             $table->unsignedBigInteger("payee");
             $table->foreign("payee")->unique()->references("id")->on("users")->onDelete('cascade');
+
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+
         });
     }
 

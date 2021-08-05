@@ -18,7 +18,8 @@ $router->get('/', function () use ($router) {
 });
 
 $router->post('/user', 'UserController@create');
-$router->get('/user/{document}', 'UserController@find');
+$router->get('/users', 'UserController@getAll');
+$router->get('/user/{id}', 'UserController@find');
 $router->get('/user/{userId}/wallet', 'WalletController@getByUser');
 
 $router->post('/transaction', 'TransactionController@create');
