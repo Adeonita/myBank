@@ -11,6 +11,7 @@ class NotificationJob extends Job
     private $value;
     private $phoneNumber;
     private $payerName;
+    public $tries = 3;
 
     public function __construct($email, $phoneNumber, $value, $payerName)
     {
