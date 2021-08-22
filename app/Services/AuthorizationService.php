@@ -6,11 +6,12 @@ use Illuminate\Support\Facades\Http;
 class AuthorizationService 
 {
     private $client;
-    private $url = 'https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6';
+    private $url;
 
     public function __construct(Http $client)
     {
         $this->client = $client;
+        $this->url = env('AUTH_TRANSACTION');
     }
 
     public function isAuthorized(): bool
