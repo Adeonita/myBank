@@ -4,33 +4,29 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use App\Services\UserService;
+use App\Validators\UserValidator;
 
 class UserController extends Controller
 {
 
     protected $user;
+    protected $validator;
 
-    public function __construct(UserService $user)
+    public function __construct(UserService $user, UserValidator $validator)
     {
         $this->user = $user;
-    }
-
-    private function validateRequest(Request $request)
-    {
-        return $this->validate($request, [
-            'firstName' => 'required',
-            'lastName' => 'required',
-            'document' => 'required|unique:users|min:11|max:14',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
-            'phoneNumber' => 'required|unique:users',
-            'type' => 'required|in:COMMON,SHOPKEEPER'
-        ]);
+        $this->validator = $validator;
     }
 
     public function create(Request $request)
     {
-        $this->validateRequest($request);
+        $validator = $this->validator->validateRequest($request);
+
+        if ($validator) {
+            return response()
+            ->json($validator, 400);
+        }
+
         $this->user->create($request->all());
     }
 
@@ -57,7 +53,4 @@ class UserController extends Controller
             ], $e->getCode());
         }
     }
-
-
-    
 }
