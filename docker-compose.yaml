@@ -1,14 +1,15 @@
-version: "2.3"
+version: "3.3"
 services:
   mysql.mybank-app.dev:
     container_name: mybank_mysql
     image: mysql:5.7
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: "mybankapppass@@"
       MYSQL_DATABASE: mybank_db
     ports:
-      - 65308:3306
+      - "65308:3306"
     volumes:
       - mysql_mybank_dev:/var/lib/mysql
     networks:
@@ -20,19 +21,23 @@ services:
     volumes:
       - ./:/var/www/html/mybank_app
     ports:
-      - 80:80
+      - "80:80"
+    links:
+      - php.mybank.dev
     depends_on:
       - mysql.mybank-app.dev
     networks:
       - app-network
   php.mybank.dev:
-    container_name: mybank_php
+    container_name: php.mybank.dev
     build: ./docker/images/php
-    command: composer install; php artisan migrate; php artisan db:seed
+    command: sh -c "php-fpm && composer install && php artisan migrate $$ php artisan db:seed"
     links:
       - mysql.mybank-app.dev:mysql.mybank-app.dev
     ports:
-      - 9000:9000
+      - "9000:9000"
+    expose:
+      - 9000
     working_dir: /var/www/html/mybank_app
     depends_on:
       - mysql.mybank-app.dev
