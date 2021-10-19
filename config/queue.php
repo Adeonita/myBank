@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'sync'),
+    'default' => env('QUEUE_CONNECTION', 'interop'),
 
     /*
     |--------------------------------------------------------------------------
@@ -63,6 +63,16 @@ return [
             'queue' => 'default',
             'retry_after' => 90,
             'block_for' => null,
+        ],
+
+        'interop' => [
+            'driver' => 'interop',
+            'dsn' => 'rdkafka://',
+            'global'=> [
+                'group.id'=> 'notifications',
+                'metadata.broker.list'=> '192.168.1.4:9092'
+            ],
+            'queue' => 'notifications'
         ],
 
     ],

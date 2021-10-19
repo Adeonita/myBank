@@ -17,17 +17,16 @@ Api RESTFULL em lumen que simula uma transação bancária entre dois usuários.
  - Realize clone do projeto na sua máquina
  - Crie o banco de dados com o nome my_bank 
     ### Na raiz do projeto: 
-    - Insira o arquivo `.env` enviado
-    - Execute o comando `composer install` para realizar a instalação das dependências
-    - Execute o comando `php artisan migrate`, para instalar as migrações
-    - Execute o comando `php artisan db:seed`, para povoar o banco de dados 
- - Execute o comando `php artisan queue:work` para monitorar os envios de notificações que serão enviados para a fila
+    - Copie o arquivo .env.example e renomeie-o para .env
+    - Execute `sh ini.sh` para inicializar o projeto
+ - Execute o comando `docker exec -it php.mybank.dev php artisan queue:work interop` para monitorar os envios de notificações que serão enviados para a fila
+
 
 ## Rotas
 
 - POST - `/transaction `
    - `  { 
-            payer: int
+            payer: int 
             payee: int
             value: float
         }    

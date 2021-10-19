@@ -1,0 +1,53 @@
+version: "3.3"
+services:
+  mysql.mybank-app.dev:
+    platform: linux/x86_64
+    container_name: mybank_mysql
+    image: mysql:5.7
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: "mybankapppass@@"
+      MYSQL_DATABASE: mybank_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_mybank_dev:/var/lib/mysql
+    networks:
+      - app-network
+  nginx.mybank.dev:
+    container_name: mybank_nginx
+    build: ./docker/images/nginx
+    command: nginx -g "daemon off;"
+    volumes:
+      - ./:/var/www/html/mybank_app
+    ports:
+      - "80:80"
+    links:
+      - php.mybank.dev
+    depends_on:
+      - mysql.mybank-app.dev
+    networks:
+      - app-network
+  php.mybank.dev:
+    container_name: php.mybank.dev
+    build: ./docker/images/php
+    links:
+      - mysql.mybank-app.dev:mysql.mybank-app.dev
+    ports:
+      - "9000:9000"
+    expose:
+      - 9000
+    working_dir: /var/www/html/mybank_app
+    depends_on:
+      - mysql.mybank-app.dev
+    volumes:
+      - ./:/var/www/html/mybank_app
+    networks:
+      - app-network
+volumes:
+  mysql_mybank_dev: {}
+networks:
+  app-network:
+    driver: bridge
+  
