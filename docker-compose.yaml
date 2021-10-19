@@ -1,6 +1,7 @@
 version: "3.3"
 services:
   mysql.mybank-app.dev:
+    platform: linux/x86_64
     container_name: mybank_mysql
     image: mysql:5.7
     restart: always
@@ -9,7 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: "mybankapppass@@"
       MYSQL_DATABASE: mybank_db
     ports:
-      - "65308:3306"
+      - "3306:3306"
     volumes:
       - mysql_mybank_dev:/var/lib/mysql
     networks:
@@ -31,7 +32,6 @@ services:
   php.mybank.dev:
     container_name: php.mybank.dev
     build: ./docker/images/php
-    command: sh -c "php-fpm && composer install && php artisan migrate $$ php artisan db:seed"
     links:
       - mysql.mybank-app.dev:mysql.mybank-app.dev
     ports:
@@ -50,3 +50,4 @@ volumes:
 networks:
   app-network:
     driver: bridge
+  
