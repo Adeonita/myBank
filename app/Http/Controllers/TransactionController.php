@@ -70,7 +70,12 @@ class TransactionController extends Controller
             $this->validateUsers($request->payer, $request->payee);
             $this->validateValueTransaction($request->value, $request->payer);
         
-            $this->transaction->create($request->all());
+            $transaction = $this->transaction->create($request->all());
+
+            return response()
+                ->json([ 
+                    "transactionId" => $transaction->id
+                ], 201);
 
         } catch (Exception $e) {
             return response()
