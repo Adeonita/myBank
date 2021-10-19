@@ -6,6 +6,8 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
+        "enqueue/fs": "^0.10.9",
+        "enqueue/laravel-queue": "^0.10.5",
         "enqueue/rdkafka": "^0.10.9",
         "guzzlehttp/guzzle": "^7.3",
         "laravel/lumen-framework": "^8.0"
