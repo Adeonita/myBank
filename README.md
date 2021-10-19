@@ -19,7 +19,7 @@ Api RESTFULL em lumen que simula uma transação bancária entre dois usuários.
     ### Na raiz do projeto: 
     - Copie o arquivo .env.example e renomeie-o para .env
     - Execute `sh ini.sh` para inicializar o projeto
- - Execute o comando `docker exec -it php.mybank.dev php artisan queue:work` para monitorar os envios de notificações que serão enviados para a fila
+ - Execute o comando `docker exec -it php.mybank.dev php artisan queue:work interop` para monitorar os envios de notificações que serão enviados para a fila
 
 
 ## Rotas
