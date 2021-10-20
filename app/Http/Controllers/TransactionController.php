@@ -13,23 +13,28 @@ use App\Validators\TransactionValidator;
 
 class TransactionController extends Controller 
 {
-    protected $user;
-    protected $wallet;
-    protected $transaction;
+    protected $userService;
+    protected $walletService;
+    protected $transactionService;
     protected $validator;
 
-    public function __construct(UserService $user, TransactionService $transaction, WalletService $wallet, TransactionValidator $validator)
+    public function __construct(
+        UserService $userService,
+        WalletService $walletService,
+        TransactionService $transactionService,
+        TransactionValidator $validator
+    )
     {
-        $this->user = $user;
-        $this->wallet = $wallet;
-        $this->transaction = $transaction;
+        $this->userService = $userService;
+        $this->walletService = $walletService;
+        $this->transactionService = $transactionService;
         $this->validator = $validator;
     }
 
     private function validateUsers(string $payerId, string $payeeId)
     {
-        $hasPayer = $this->user->getById($payerId); //Pagador
-        $hasPayee = $this->user->getById($payeeId);
+        $hasPayer = $this->userService->getById($payerId); //Pagador
+        $hasPayee = $this->userService->getById($payeeId);
 
         if ($payerId === $payeeId) {
             throw new InvalidOperation("Payee don't can equal to Payer", 400);
@@ -50,7 +55,7 @@ class TransactionController extends Controller
 
     private function validateValueTransaction(float $value, string $payerId) 
     {
-        $balance = $this->wallet->getBalance($payerId);
+        $balance = $this->walletService->getBalance($payerId);
         
         if ($balance < $value) {
             throw new InsufficientFunds("Insufficient Funds", 400);
@@ -88,7 +93,7 @@ class TransactionController extends Controller
     public function getByUser(string $userId) 
     {
         try {
-            $this->user->getById($userId);
+            $this->userService->getById($userId);
             return $this->transaction->getByUser($userId);
         } catch (Exception $e) {
             return response()
