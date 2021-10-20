@@ -2,57 +2,57 @@
 namespace App\Services;
 
 use App\Models\Wallet;
+use App\Repositories\WalletRepository;
 use App\Http\Interfaces\WalletServiceInterface;
 use Illuminate\Support\Facades\DB;
 
 class WalletService implements WalletServiceInterface
 {
+    private $walletRepository;
+
+    public function __construct(WalletRepository $walletRepository)
+    {
+        $this->walletRepository = $walletRepository;
+    }
+
+    private function formatResponse(string $messageContent, int $statusCode)
+    {
+        return response()
+        ->json([
+            "response" => $messageContent,
+        ], $statusCode);
+    }
 
     public function getBalance(string $userId)
     {
-        $wallet = Wallet::firstWhere('user_id', $userId);
-        return $wallet->money;
+        return $this->walletRepository->getBalance($userId);
     }
 
     public function create($userId): void
     {
-        Wallet::create([
-            'user_id' => $userId,
-            'money' => 0
-        ]);
-    }
-
-    private function updateBalance(string $userId, float $value)
-    {
-        return Wallet::where('user_id', $userId)
-            ->update(['money' => $value]);
+        $this->walletRepository->create($userId);
     }
 
     public function addMoney(string $userId, float $value)
     {
-        $balance = ($this->getBalance(($userId))) + $value;
+        $balance = ($this->walletRepository->getBalance(($userId))) + $value;
 
-        $this->updateBalance($userId, $balance);
+        $this->walletRepository->updateBalance($userId, $balance);
     }
 
     public function debitMoney(string $userId, float $value)
     {
-        $balance = ($this->getBalance($userId)) - $value;
+        $balance = ($this->walletRepository->getBalance($userId)) - $value;
 
-        $this->updateBalance($userId, $balance);
+        $this->walletRepository->updateBalance($userId, $balance);
     }
 
     public function getByUser(string $userId)
     {
-        $userwithWallet = DB::table('wallets')
-        ->select(['users.firstName', 'users.lastName', 'wallets.money'])
-        ->join('users', 'users.id', '=', 'wallets.user_id')
-        ->where('wallets.user_id', '=', $userId)
-        ->get();
-
-        return response()
-        ->json([
-            "response" => $userwithWallet,
-        ],200);
+        $userWithWallet = $this->walletRepository->getByUser($userId);
+        
+        return  $userWithWallet 
+                ? $this->formatResponse($userWithWallet, 200)
+                : $this->formatResponse("User not found", 404);      
     }
 }
