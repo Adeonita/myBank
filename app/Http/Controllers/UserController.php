@@ -27,7 +27,11 @@ class UserController extends Controller
             ->json($validator, 400);
         }
 
-        $this->user->create($request->all());
+        $user = $this->user->create($request->all());
+
+        return response()->json([
+            "userId" => $user->id
+        ], 201);
     }
 
     public function find(string $id)
