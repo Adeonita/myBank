@@ -75,7 +75,7 @@ class TransactionController extends Controller
             $this->validateUsers($request->payer, $request->payee);
             $this->validateValueTransaction($request->value, $request->payer);
         
-            $transaction = $this->transaction->create($request->all());
+            $transaction = $this->transactionService->create($request->all());
 
             return response()
                 ->json([ 

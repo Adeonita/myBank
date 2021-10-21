@@ -6,8 +6,8 @@ use App\Jobs\NotificationJob;
 
 class NotificationService implements NotificationInterface
 {
-    public function send($email, $phoneNumber, $value, $payerName)
+    public function send($payeeEmail, $payeePhoneNumber, $value, $payerName)
     {
-        dispatch(new NotificationJob($email, $phoneNumber, $value, $payerName));
+        dispatch(new NotificationJob($payeeEmail, $payeePhoneNumber, $value, $payerName));
     }
 }

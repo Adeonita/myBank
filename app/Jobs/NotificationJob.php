@@ -7,18 +7,18 @@ use App\Services\AuthorizationNotificationService;
 
 class NotificationJob extends Job
 {
-    private $email;
-    private $value;
-    private $phoneNumber;
+    private $payeeEmail;
+    private $transactionValue;
+    private $payeePhoneNumber;
     private $payerName;
     public $tries = 3;
 
-    public function __construct($email, $phoneNumber, $value, $payerName)
+    public function __construct($payeeEmail, $payeePhoneNumber, $transactionValue, $payerName)
     {
-        $this->email = $email;
-        $this->value = $value;
+        $this->payeeEmail = $payeeEmail;
+        $this->transactionValue = $transactionValue;
         $this->payerName = $payerName;
-        $this->phoneNumber = $phoneNumber;
+        $this->payeePhoneNumber = $payeePhoneNumber;
     }
 
     public function handle(AuthorizationNotificationService $authorizationNotificationService)
@@ -31,9 +31,9 @@ class NotificationJob extends Job
 
         //Simulação de envio de email
         echo "\n
-                Email de destino: $this->email \n
-                Numero de telefone de destino: $this->phoneNumber \n  
-                Menssagem: Você recebeu um deposito no valor de R$: $this->value de $this->payerName \n
+                Email de destino: $this->payeeEmail \n
+                Numero de telefone de destino: $this->payeePhoneNumber \n  
+                Menssagem: Você recebeu um depósito no valor de R$: $this->transactionValue de $this->payerName \n
             ";
     }
 

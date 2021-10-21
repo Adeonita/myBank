@@ -34,15 +34,15 @@ class TransactionService implements TransactionServiceInterface
     private function getTransactionData($transaction)
     {
         $payerName = $this->user->getById($transaction['payer'])->firstName;
-        $user = $this->user->getById($transaction['payee']);
-        $email = $user->email;
-        $phoneNumber = $user->phoneNumber;
+        $payee = $this->user->getById($transaction['payee']);
+        $payeeEmail = $payee->email;
+        $payeePhoneNumber = $payee->phoneNumber;
 
         return [ 
+            $payeeEmail,
+            $payeePhoneNumber,
+            $transaction->value,
             $payerName,
-            $user,
-            $email,
-            $phoneNumber,
         ];
     }
 
@@ -60,7 +60,6 @@ class TransactionService implements TransactionServiceInterface
                 }
 
                 $transaction = $this->transactionRepository->create($transaction);
-
                 $this->notification->send(...$this->getTransactionData($transaction));
             DB::commit();
             
