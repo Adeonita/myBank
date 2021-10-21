@@ -17,10 +17,10 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('/user', 'UserController@create');
+$router->post('/users', 'UserController@create');
 $router->get('/users', 'UserController@getAll');
-$router->get('/user/{id}', 'UserController@find');
-$router->get('/user/{userId}/wallet', 'WalletController@getByUser');
+$router->get('/users/{id}', 'UserController@find');
+$router->get('/users/{userId}/wallets', 'WalletController@getByUser');
 
-$router->post('/transaction', 'TransactionController@create');
-$router->get('/transaction/user/{userId}', 'TransactionController@getByUser');
+$router->post('/transactions', 'TransactionController@create');
+$router->get('/transactions/users/{userId}', 'TransactionController@getByUser');

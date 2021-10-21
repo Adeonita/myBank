@@ -22,7 +22,7 @@ class TransactionService implements TransactionServiceInterface
         $this->authorization = $authorization;
     }
 
-    public function create($transaction): void
+    public function create($transaction): Transaction
     {
         try {
             DB::beginTransaction();
@@ -35,16 +35,19 @@ class TransactionService implements TransactionServiceInterface
                     throw new UnauthorizedTransaction("Unauthorized Transaction", 401);
                 }
 
-                Transaction::create($transaction);
-
+                $transaction = Transaction::create($transaction);
+                
                 $payerName = $this->user->getById($transaction['payer'])->firstName;
                 $user = $this->user->getById($transaction['payee']);
                 $email = $user->email;
                 $phoneNumber = $user->phoneNumber;
 
                 $this->notification->send($email, $phoneNumber, $transaction['value'], $payerName);
-            
             DB::commit();
+            
+            if ($transaction) {
+                return $transaction;
+            }
 
         } catch (Exception $e) {
             DB::rollBack();

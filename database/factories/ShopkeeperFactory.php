@@ -26,7 +26,6 @@ class ShopkeeperFactory extends Factory
             "lastName" =>  $this->faker->lastName(),
             'email' => $this->faker->unique()->safeEmail,
             'document' => $this->faker->numerify('###########'), 
-            'email' => $this->faker->email() , 
             'password'=> $this->faker->password() , 
             'phoneNumber'=> $this->faker->numerify('###########') , 
             'type' => ('SHOPKEEPER'),

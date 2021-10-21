@@ -50,11 +50,9 @@ class WalletService implements WalletServiceInterface
         ->where('wallets.user_id', '=', $userId)
         ->get();
 
-        //TODO: revisar se é o padrão correto de retorno para rest
         return response()
         ->json([
             "response" => $userwithWallet,
-            "code" => 200
         ],200);
     }
 }

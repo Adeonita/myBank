@@ -43,7 +43,7 @@ class UserService implements UserServiceInterface
         $user = User::find($id);
 
         if (!$user) {
-            throw new UserNotFound("User not Found", 404);
+            throw new UserNotFound("User Not Found", 404);
         }
         
         return $user;

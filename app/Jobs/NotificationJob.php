@@ -24,7 +24,7 @@ class NotificationJob extends Job
     {
         $isAuthorized = $authorizationNotificationService->isAuthorized();
 
-        if (!!$isAuthorized) {
+        if (!$isAuthorized) {
             throw new Exception("Serviço indisponível   ", 400);
         }
 
