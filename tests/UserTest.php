@@ -29,10 +29,10 @@
             $simpleUser = $this->mockUser("COMMON");
             $shopkeeper = $this->mockUser("SHOPKEEPER");
             
-            $this->post('/user', $simpleUser, []);
-            $this->post('/user', $shopkeeper, []);
+            $this->post('/users', $simpleUser, []);
+            $this->post('/users', $shopkeeper, []);
 
-            $this->seeStatusCode(200);
+            $this->seeStatusCode(201);
         }
     }
     
