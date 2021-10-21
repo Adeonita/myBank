@@ -3,7 +3,6 @@ namespace App\Services;
 
 use App\Http\Interfaces\NotificationInterface;
 use App\Jobs\NotificationJob;
-use Exception;
 
 class NotificationService implements NotificationInterface
 {
