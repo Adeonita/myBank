@@ -11,7 +11,6 @@ class NotificationJob extends Job
     private $transactionValue;
     private $payeePhoneNumber;
     private $payerName;
-    public $tries = 3;
 
     public function __construct($payeeEmail, $payeePhoneNumber, $transactionValue, $payerName)
     {
@@ -25,7 +24,7 @@ class NotificationJob extends Job
     {
         $isAuthorized = $authorizationNotificationService->isAuthorized();
 
-        if (!!$isAuthorized) {
+        if (!$isAuthorized) {
             throw new Exception("Serviço indisponível   ", 400);
         }
 
