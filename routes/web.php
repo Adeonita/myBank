@@ -20,7 +20,7 @@ $router->get('/', function () use ($router) {
 $router->post('/users', 'UserController@create');
 $router->get('/users', 'UserController@getAll');
 $router->get('/users/{id}', 'UserController@find');
-$router->get('/users/{userId}/wallets', 'WalletController@getByUser');
+$router->get('/users/{userId}/wallet', 'WalletController@getByUser');
 
 $router->post('/transactions', 'TransactionController@create');
 $router->get('/transactions/users/{userId}', 'TransactionController@getByUser');

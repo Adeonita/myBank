@@ -49,7 +49,12 @@ class UserController extends Controller
     public function getAll()
     {
         try {
-            return $this->user->getAll();                
+            $users = $this->user->getAll();
+        
+            return response()
+            ->json(
+                $users
+            , 200);
         } catch (Exception $e) {
             return response()
             ->json([
