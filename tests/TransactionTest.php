@@ -1,5 +1,8 @@
 <?php
 
+use App\Services\WalletService;
+use App\Repositories\WalletRepository;
+
 class TransactionTest extends TestCase
 {
     private function mockUser(string $userType) 
@@ -33,10 +36,6 @@ class TransactionTest extends TestCase
         $payerId = ($this->post('/users', $simpleUser))->response->json()['userId'];
         $payeeId = ($this->post('/users', $shopkeeperUser))->response->json()['userId'];
 
-        
-
-        //TODO: Adicionar fundos a carteira do pagador quando for um caso de suceso
-
         $response = $this->call(
             'POST',
             '/transactions',
@@ -48,5 +47,30 @@ class TransactionTest extends TestCase
         );
 
         $this->assertEquals(400, $response->status());
+    }
+
+    public function testShouldReturnStatusCode201()
+    {
+        $simpleUser = $this->mockUser("COMMON");
+        $shopkeeperUser = $this->mockUser("SHOPKEEPER");
+
+        $payerId = ($this->post('/users', $simpleUser))->response->json()['userId'];
+        $payeeId = ($this->post('/users', $shopkeeperUser))->response->json()['userId'];
+
+        $walletRepository = new WalletRepository();
+
+        $walletRepository->updateBalance($payerId, 100.00);
+
+        $response = $this->call(
+            'POST',
+            '/transactions',
+            [
+                'payer' => $payerId,
+                'payee' => $payeeId,
+                'value' => 1.00,
+            ] 
+        );
+
+        $this->assertEquals(201, $response->status());
     }
 }
