@@ -70,7 +70,7 @@ return [
             'dsn' => 'rdkafka://',
             'global'=> [
                 'group.id'=> 'test',
-                'metadata.broker.list'=> '192.168.1.4:9092'
+                'metadata.broker.list' => 'kafka:9092' 
             ],
             'queue' => 'test'
         ],
