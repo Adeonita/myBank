@@ -69,10 +69,9 @@ return [
             'driver' => 'interop',
             'dsn' => 'rdkafka://',
             'global'=> [
-                'group.id'=> 'test',
+                'group.id'=> 'notification',
                 'metadata.broker.list' => 'kafka:9092' 
             ],
-            'queue' => 'test'
         ],
 
     ],
