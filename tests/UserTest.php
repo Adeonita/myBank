@@ -39,7 +39,7 @@
         public function testShoudReturnUserList()
         {
             $user = $this->mockUser("COMMON");
-            $this->post('users', $user);
+            $this->post('/users', $user);
 
             $this->json(
                 'GET', 
