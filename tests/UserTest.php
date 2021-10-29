@@ -2,7 +2,8 @@
 
     class UserTest extends TestCase {
 
-       private function mockUser(string $userType) {
+        private function mockUser(string $userType) 
+        {
             $faker = Faker\Factory::create();
 
             $type = "COMMON";
@@ -27,12 +28,40 @@
         public function testShouldCreateUser()
         {
             $simpleUser = $this->mockUser("COMMON");
-            $shopkeeper = $this->mockUser("SHOPKEEPER");
-            
-            $this->post('/user', $simpleUser, []);
-            $this->post('/user', $shopkeeper, []);
 
-            $this->seeStatusCode(200);
+            $response = $this->call('POST', '/users', $simpleUser);
+            $json = $this->response->json();
+
+            $this->assertEquals(201, $response->status());
+            $this->assertArrayHasKey('userId', $json);
+        }
+
+        public function testShoudReturnUserList()
+        {
+            $user = $this->mockUser("COMMON");
+            $this->post('/users', $user);
+
+            $this->json(
+                'GET', 
+                '/users',
+                [
+                    "firstName" => $user["firstName"],
+                    "lastName" => $user["lastName"],
+                    "document" => $user["document"],
+                    "email" => $user["email"],
+                    "phoneNumber" => $user["phoneNumber"],
+                    "type" => $user["type"]
+                ] 
+            )->seeJson(
+                [
+                    "firstName" => $user["firstName"],
+                    "lastName" => $user["lastName"],
+                    "document" => $user["document"],
+                    "email" => $user["email"],
+                    "phoneNumber" => $user["phoneNumber"],
+                    "type" => $user["type"]
+                ]
+            )->seeStatusCode(200);
         }
     }
     
