@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Http\Interfaces\TransactionServiceInterface;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\UnauthorizedTransaction;
+use App\Repositories\TransactionRepository;
 
 class TransactionService implements TransactionServiceInterface
 {
@@ -13,13 +14,36 @@ class TransactionService implements TransactionServiceInterface
     protected $user;
     protected $notification;
     protected $authorization;
+    protected $transactionRepository;
 
-    public function __construct(WalletService $wallet, UserService $user, NotificationService $notification, AuthorizationService $authorization)
+    public function __construct(
+        WalletService $wallet, 
+        UserService $user, 
+        NotificationService $notification, 
+        AuthorizationService $authorization,
+        TransactionRepository $transactionRepository
+    )
     {
         $this->user = $user;
         $this->wallet = $wallet;
         $this->notification = $notification;
         $this->authorization = $authorization;
+        $this->transactionRepository = $transactionRepository;
+    }
+
+    private function getTransactionData($transaction)
+    {
+        $payerName = $this->user->getById($transaction['payer'])->firstName;
+        $payee = $this->user->getById($transaction['payee']);
+        $payeeEmail = $payee->email;
+        $payeePhoneNumber = $payee->phoneNumber;
+
+        return [ 
+            $payeeEmail,
+            $payeePhoneNumber,
+            $transaction->value,
+            $payerName,
+        ];
     }
 
     public function create($transaction): Transaction
@@ -35,14 +59,8 @@ class TransactionService implements TransactionServiceInterface
                     throw new UnauthorizedTransaction("Unauthorized Transaction", 401);
                 }
 
-                $transaction = Transaction::create($transaction);
-                
-                $payerName = $this->user->getById($transaction['payer'])->firstName;
-                $user = $this->user->getById($transaction['payee']);
-                $email = $user->email;
-                $phoneNumber = $user->phoneNumber;
-
-                $this->notification->send($email, $phoneNumber, $transaction['value'], $payerName);
+                $transaction = $this->transactionRepository->create($transaction);
+                $this->notification->send(...$this->getTransactionData($transaction));
             DB::commit();
             
             if ($transaction) {
@@ -57,6 +75,6 @@ class TransactionService implements TransactionServiceInterface
 
     public function getByUser(string $userId)
     {
-        return Transaction::where('transactions.payer', $userId)->get();
+        return $this->transactionRepository->getByUser($userId);
     }
 }

@@ -7,25 +7,24 @@ use App\Services\WalletService;
 use App\Exceptions\UserNotFound;
 use Illuminate\Support\Facades\DB;
 use App\Http\Interfaces\UserServiceInterface;
+use App\Repositories\UserRepository;
 
 class UserService implements UserServiceInterface
 {
 
     protected $wallet;
+    private $userRepository;
 
-    public function __construct(WalletService $wallet)
+    public function __construct(WalletService $wallet, UserRepository $userRepository)
     {
         $this->wallet = $wallet;
+        $this->userRepository = $userRepository;
     }
 
-    public function create($user): void
+    public function create($userData): User
     {
-        try {              
-            DB::beginTransaction();
-                $user =  User::create($user);
-
-                $this->wallet->create($user->id);
-            DB::commit();
+        try {     
+            return $this->userRepository->createWithWallet($userData);
         } catch (Exception $e) {
             DB::rollBack();
             echo response()->json([
@@ -35,12 +34,12 @@ class UserService implements UserServiceInterface
     }
 
     public function getAll() {
-        return User::all();
+        return $this->userRepository->getAll();
     }
 
     public function getById(string $id): User
     {
-        $user = User::find($id);
+        $user = $this->userRepository->get($id);
 
         if (!$user) {
             throw new UserNotFound("User Not Found", 404);
