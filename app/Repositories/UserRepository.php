@@ -5,9 +5,9 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Services\WalletService;
 use Illuminate\Support\Facades\DB;
+use App\Interfaces\Repositories\UserRepositoryInterface;
 
-
-class UserRepository 
+class UserRepository implements UserRepositoryInterface
 {
     private $wallet;
 
