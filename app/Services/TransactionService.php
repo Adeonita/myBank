@@ -7,36 +7,37 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\UnauthorizedTransaction;
 use App\Interfaces\Services\TransactionServiceInterface;
+use App\Interfaces\Services\UserServiceInterface;
+use App\Interfaces\Services\WalletServiceInterface;
 use App\Interfaces\Repositories\TransactionRepositoryInterface;
 
 class TransactionService implements TransactionServiceInterface
 {
-    protected $wallet;
-    protected $user;
-    protected $notification;
-    protected $authorization;
+    protected $walletService;
+    protected $userService;
+    protected $notificationService;
+    protected $authorizationService;
     protected $transactionRepository;
 
-    //TODO: Receber interfaces do wallet, user, notification e autorization
     public function __construct(
-        WalletService $wallet, 
-        UserService $user, 
-        NotificationService $notification, 
-        AuthorizationService $authorization,
+        WalletServiceInterface $walletService, 
+        UserServiceInterface $userService, 
+        NotificationService $notificationService, 
+        AuthorizationService $authorizationService,
         TransactionRepositoryInterface $transactionRepository
     )
     {
-        $this->user = $user;
-        $this->wallet = $wallet;
-        $this->notification = $notification;
-        $this->authorization = $authorization;
+        $this->userService = $userService;
+        $this->walletService = $walletService;
+        $this->notificationService = $notificationService;
+        $this->authorizationService = $authorizationService;
         $this->transactionRepository = $transactionRepository;
     }
 
     private function getTransactionData($transaction)
     {
-        $payerName = $this->user->getById($transaction['payer'])->firstName;
-        $payee = $this->user->getById($transaction['payee']);
+        $payerName = $this->userService->getById($transaction['payer'])->firstName;
+        $payee = $this->userService->getById($transaction['payee']);
         $payeeEmail = $payee->email;
         $payeePhoneNumber = $payee->phoneNumber;
 
@@ -52,17 +53,17 @@ class TransactionService implements TransactionServiceInterface
     {
         try {
             DB::beginTransaction();
-                $this->wallet->debitMoney($transaction['payer'], $transaction['value']);
-                $this->wallet->addMoney($transaction['payee'], $transaction['value']);
+                $this->walletService->debitMoney($transaction['payer'], $transaction['value']);
+                $this->walletService->addMoney($transaction['payee'], $transaction['value']);
 
-                $isAuthorized = $this->authorization->isAuthorized();
+                $isAuthorized = $this->authorizationService->isAuthorized();
                 
                 if (!$isAuthorized) {
                     throw new UnauthorizedTransaction("Unauthorized Transaction", 401);
                 }
 
                 $transaction = $this->transactionRepository->create($transaction);
-                $this->notification->send(...$this->getTransactionData($transaction));
+                $this->notificationService->send(...$this->getTransactionData($transaction));
             DB::commit();
             
             if ($transaction) {
