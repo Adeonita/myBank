@@ -4,8 +4,9 @@ namespace App\Repositories;
 
 use App\Models\Wallet;
 use Illuminate\Support\Facades\DB;
+use App\Interfaces\Repositories\WalletRepositoryInterface;
 
-class WalletRepository
+class WalletRepository implements WalletRepositoryInterface
 {
     public function create(string $userId)
     {
