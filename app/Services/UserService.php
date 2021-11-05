@@ -6,18 +6,15 @@ use App\Models\User;
 use App\Exceptions\UserNotFound;
 use Illuminate\Support\Facades\DB;
 use App\Interfaces\Services\UserServiceInterface;
-use App\Interfaces\Services\WalletServiceInterface;
 use App\Interfaces\Repositories\UserRepositoryInterface;
 
 class UserService implements UserServiceInterface
 {
 
-    protected $wallet;
     private $userRepository;
 
-    public function __construct(WalletServiceInterface $wallet, UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->wallet = $wallet;
         $this->userRepository = $userRepository;
     }
 
