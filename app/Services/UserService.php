@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Services\WalletService;
 use App\Exceptions\UserNotFound;
 use Illuminate\Support\Facades\DB;
-use App\Http\Interfaces\UserServiceInterface;
+use App\Interfaces\Services\UserServiceInterface;
 use App\Interfaces\Repositories\UserRepositoryInterface;
 
 class UserService implements UserServiceInterface

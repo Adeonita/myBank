@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
-use App\Services\UserService;
+use App\Interfaces\Services\UserServiceInterface;
 use App\Validators\UserValidator;
 
 class UserController extends Controller
@@ -12,7 +12,7 @@ class UserController extends Controller
     protected $user;
     protected $validator;
 
-    public function __construct(UserService $user, UserValidator $validator)
+    public function __construct(UserServiceInterface $user, UserValidator $validator)
     {
         $this->user = $user;
         $this->validator = $validator;
