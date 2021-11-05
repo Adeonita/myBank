@@ -3,13 +3,13 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
-use App\Services\UserService;
-use App\Services\WalletService;
 use App\Exceptions\UserNotFound;
 use App\Exceptions\InvalidOperation;
 use App\Exceptions\InsufficientFunds;
 use App\Validators\TransactionValidator;
 use App\Interfaces\Services\TransactionServiceInterface;
+use App\Interfaces\Services\UserServiceInterface;
+use App\Interfaces\Services\WalletServiceInterface;
 
 class TransactionController extends Controller 
 {
@@ -19,8 +19,8 @@ class TransactionController extends Controller
     protected $validator;
 
     public function __construct(
-        UserService $userService,
-        WalletService $walletService,
+        UserServiceInterface $userService,
+        WalletServiceInterface $walletService,
         TransactionServiceInterface $transactionService,
         TransactionValidator $validator
     )
