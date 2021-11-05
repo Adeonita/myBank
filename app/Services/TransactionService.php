@@ -3,10 +3,11 @@ namespace App\Services;
 
 use Exception;
 use App\Models\Transaction;
-use App\Http\Interfaces\TransactionServiceInterface;
+
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\UnauthorizedTransaction;
-use App\Repositories\TransactionRepository;
+use App\Interfaces\Services\TransactionServiceInterface;
+use App\Interfaces\Repositories\TransactionRepositoryInterface;
 
 class TransactionService implements TransactionServiceInterface
 {
@@ -16,12 +17,13 @@ class TransactionService implements TransactionServiceInterface
     protected $authorization;
     protected $transactionRepository;
 
+    //TODO: Receber interfaces do wallet, user, notification e autorization
     public function __construct(
         WalletService $wallet, 
         UserService $user, 
         NotificationService $notification, 
         AuthorizationService $authorization,
-        TransactionRepository $transactionRepository
+        TransactionRepositoryInterface $transactionRepository
     )
     {
         $this->user = $user;

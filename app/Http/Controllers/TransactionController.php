@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Services\WalletService;
 use App\Exceptions\UserNotFound;
-use App\Services\TransactionService;
 use App\Exceptions\InvalidOperation;
 use App\Exceptions\InsufficientFunds;
 use App\Validators\TransactionValidator;
+use App\Interfaces\Services\TransactionServiceInterface;
 
 class TransactionController extends Controller 
 {
@@ -21,7 +21,7 @@ class TransactionController extends Controller
     public function __construct(
         UserService $userService,
         WalletService $walletService,
-        TransactionService $transactionService,
+        TransactionServiceInterface $transactionService,
         TransactionValidator $validator
     )
     {
