@@ -2,14 +2,15 @@
     namespace App\Http\Controllers;
 
     use Exception;
-    use App\Services\UserService;
-    use App\Services\WalletService;
+    use App\Interfaces\Services\UserServiceInterface;
+    use App\Interfaces\Services\WalletServiceInterface;
 
+    
     class WalletController extends Controller {
         protected $user;
         protected $wallet;
 
-        public function __construct(UserService $user, WalletService $wallet) {
+        public function __construct(UserServiceInterface $user, WalletServiceInterface $wallet) {
             $this->user = $user;
             $this->wallet = $wallet;
         }

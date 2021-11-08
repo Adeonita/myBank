@@ -1,16 +1,15 @@
 <?php
 namespace App\Services;
 
-use App\Models\Wallet;
-use App\Repositories\WalletRepository;
-use App\Http\Interfaces\WalletServiceInterface;
-use Illuminate\Support\Facades\DB;
+
+use App\Interfaces\Services\WalletServiceInterface;
+use App\Interfaces\Repositories\WalletRepositoryInterface;
 
 class WalletService implements WalletServiceInterface
 {
     private $walletRepository;
 
-    public function __construct(WalletRepository $walletRepository)
+    public function __construct(WalletRepositoryInterface $walletRepository)
     {
         $this->walletRepository = $walletRepository;
     }

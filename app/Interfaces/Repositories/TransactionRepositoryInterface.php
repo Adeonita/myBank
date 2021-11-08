@@ -1,9 +1,10 @@
 <?php
-namespace App\Http\Interfaces;
+
+namespace App\Interfaces\Repositories;
 
 use App\Models\Transaction;
 
-interface TransactionServiceInterface 
+interface TransactionRepositoryInterface
 {
     public function create($transaction): Transaction;
     public function getByUser(string $userId);
