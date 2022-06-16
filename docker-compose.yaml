@@ -9,7 +9,7 @@ services:
       MYSQL_ROOT_PASSWORD: "mybankapppass@@"
       MYSQL_DATABASE: mybank_db
     ports:
-      - "65308:3306"
+      - "3306:3306"
     volumes:
       - mysql_mybank_dev:/var/lib/mysql
     networks:
@@ -30,19 +30,25 @@ services:
       - app-network
   php.mybank.dev:
     container_name: php.mybank.dev
-    build: ./docker/images/php
-    command: sh -c "php-fpm && composer install && php artisan migrate $$ php artisan db:seed"
+    build: 
+      context: ./
+      dockerfile: ./docker/images/php/Dockerfile
+    working_dir: /var/www/html/mybank_app
+  
+    command: bash -c "echo hello "
+    # command: sh -c "php-fpm && composer install && php artisan migrate $$ php artisan db:seed"
     links:
       - mysql.mybank-app.dev:mysql.mybank-app.dev
     ports:
       - "9000:9000"
     expose:
       - 9000
-    working_dir: /var/www/html/mybank_app
+    # working_dir: /var/www/html/mybank_app
     depends_on:
       - mysql.mybank-app.dev
     volumes:
       - ./:/var/www/html/mybank_app
+    command: sh -c "php-fpm && composer install && php artisan migrate $$ php artisan db:seed"
     networks:
       - app-network
 volumes:
