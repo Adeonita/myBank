@@ -1,7 +1,7 @@
 <?php
-namespace App\Http\Interfaces;
+namespace App\Interfaces\Services;
 
-interface NotificationInterface 
+interface NotificationServiceInterface 
 {
     public function send(string $email, string $phoneNumber, float $value, string $payerName);
 }

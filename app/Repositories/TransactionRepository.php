@@ -2,8 +2,10 @@
 namespace App\Repositories;
 
 use App\Models\Transaction;
+use App\Interfaces\Repositories\TransactionRepositoryInterface;
 
-class TransactionRepository {
+class TransactionRepository implements TransactionRepositoryInterface
+{
     public function create($transaction): Transaction
     {
         return Transaction::create($transaction);

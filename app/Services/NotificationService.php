@@ -1,11 +1,11 @@
 <?php
 namespace App\Services;
 
-use App\Http\Interfaces\NotificationInterface;
-use App\Jobs\EmailJob;
 use App\Jobs\SmsJob;
+use App\Jobs\EmailJob;
+use App\Interfaces\Services\NotificationServiceInterface;
 
-class NotificationService implements NotificationInterface
+class NotificationService implements NotificationServiceInterface
 {
     public function send($payeeEmail, $payeePhoneNumber, $value, $payerName)
     {
